@@ -1,7 +1,6 @@
-Artist.java
-===========
 package artpricingsystem;
 import java.io.*;
+import java.util.Scanner;
 
 
  //@author jessicaspalding
@@ -11,28 +10,19 @@ class Artist {
 private String artistFirstName;
 private String artistLastName ;
 private int fashionabilityValue;
-private Artist[] arr;
 
     //Desc: constructor for Artist
     //Post: allows class to set the value of the artistFirstName, artistLastName,
-    //		and fashionabilityValue field in a record and add it to the array 
-    //      of Artist objects
+    //		and fashionabilityValue field in a record
     Artist(String f, String l, int v)
     {
         artistFirstName=f;
         artistLastName=l;
         fashionabilityValue=v;
-        //read("Artist.txt")
-	//arr.add(this)
+
     }
 
-    //Desc: constructor for Artist
-    //Post: allows class to set a new record and add it to the array of
-    //      Artist objects
-    Artist()
-    {
-        //read("Artist.txt")
-        //arr.add(this)       
+    private Artist() {
     }
 
     //Desc: allows class to access the artistFirstName field in a record
@@ -77,62 +67,65 @@ private Artist[] arr;
         fashionabilityValue=v;
     }
 
-    //Desc: Finds the record the user wants to update and updates the 
-    //artistFirstName field in the found object
+    //Desc: updates an artist's first name in a record from user's input
     //Post: artistsFirstName field is updated 
-    public void updateArtistsFirstName(String lname, String fname, String first)
+    public void updateArtistsFirstName()
     {
-        Artist foundObj=findObject(lname, fname); //don't think the find works yet
-        foundObj.setArtistFirstName(first);
-        foundObj.save();
+        System.out.println("Old Artist First Name:" + artistFirstName);
+        System.out.println("Please enter new Artist First Name");
+        Scanner input=new Scanner(System.in);
+        artistFirstName=input.toString();
     }
 
     //Desc: Finds the record the user wants to update and updates the 
     //artistLastName field in the found object
     //Post: artistLastName field is updated
-    public void updateArtistLastName(String lname, String fname, String last)
+    public void updateArtistLastName()
     {
-        Artist foundObj=findObject(lname, fname);
-        foundObj.setArtistFirstName(last);
-        foundObj.save();
+        System.out.println("Old Artist Last Name:" + artistLastName);
+        System.out.println("Please enter new Artist Last Name");
+        Scanner input=new Scanner(System.in);
+        artistLastName=input.toString();
     }	
 
     //Desc: Finds the record the user wants to update and updates the 
     //fashionabilityValue field in the found object
     //Post: fashionabilityValue field is updated
-    public void updateFashionabilityValue(String ln, String fn, String fash)
+    public void updateFashionabilityValue()
     {
-            Artist foundObj=findObject(ln, fn); //if changing the find, change this
-            foundObj.setArtistFirstName(fash); 
-            foundObj.save();
+        System.out.println("Old Fashionability Value:" + artistLastName);
+        System.out.println("Please enter new Fashionability Value");
+        Scanner input=new Scanner(System.in);
+        fashionabilityValue= input.nextInt();
     }	
 
-//Desc:uses the last name and the first name of an artist to find the object
-// in the array 
-//Return: returns the found Artist object or null value if Artist not found
-    public Artist findObject(String alastname, String afirstname) //I don't think this works
+    //Desc:uses the last name and the first name of an artist to find a record
+    //     in the file
+    //Post: 
+    //Return: returns true if record is found or false if record is not found
+    public boolean find(String alastname, String afirstname) //I don't think this works
     {
   // find locates a given investment record if it exists.
   // Returns true if the investment is located, otherwise false.
         try
         {
             File artistFile = new File ("Artist.dat");
-            boolean	found = false;		// result of comparison
+            boolean found = false;		
 
             if (artistFile.exists ())
             {
-              RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+               RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
 
-              while (!found && (inFile.getFilePointer () != inFile.length ()))
-              {
-                  read (inFile);
+                while (!found && (inFile.getFilePointer () != inFile.length ()))
+                {
+                    read (inFile);
 
-                  //if (.compareTo (findInvestmentID) == 0) found = true; make work for ours
-              }
-              inFile.close();
+                    if (artistLastName.equals(alastname) && artistFirstName.equals(afirstname))
+                        found = true;
+                }
+                  inFile.close();
             }
-
-            return found; //returns boolean right now, not artist
+                return found;
         }
         catch (Exception e)
         {
@@ -143,39 +136,13 @@ private Artist[] arr;
         }
 
   }
-            /* old way for(int i=0; arr.length<i; ++i )
-            {
-                if(arr[i].getArtistLastName().equals(alastname) && 
-                arr[i].getArtistFirstName().equals(afirstname)) //if the key matches
-                    return arr[i]; //return the object
-            }
-            return null;
-    */
-
-//Desc: uses the last name and the first name of an artist to find the index
-// of the desired object in the array 
-//Return: returns the found Artist object's index in the array or null value 
-// if Artist not found
-public int findIndex(String alastname, String afirstname)
-    {
-        for(int i=0; arr.length<i; ++i )
-        {
-            if(arr[i].getArtistLastName().equals(alastname) && 
-            arr[i].getArtistFirstName().equals(afirstname)) //if the key matches
-                return i; //return the index
-        }
-        return -1;
-    }
-
-    //Desc: reads in a file to the scanner, sets each field in the text
-    //		    file to a field in a new Artist object
+    
+    //Desc: reads an artist record form fileName
     //Pre: file must exist 
-//Post: an array full of Artist objects is created
-    public void read(RandomAccessFile fileName)// throw exception FileNotFoundException //may not use this
+    //Post: artistLastName, artistFirstName and fashionabilityValue in this 
+    //      object are changed
+    public void read(RandomAccessFile fileName)
     {
-  // reads an investment record from fileName.
-  // Assumes that the existence of fileName has already been established.
-  //
         try
         {
             String  inputString = new String ();	// for storing artist record
@@ -220,19 +187,7 @@ public int findIndex(String alastname, String afirstname)
         }
 
       }
-    
-        /* old way Scanner input=new Scanner(RandomAccessFile);
-        //allows the file to be read in
-        int count=0;
-        while(input.hasNextLine()) 
-        //loops through each line in the file
-        {	
-            Artist newArtist=new Artist(input.next(), input.next(), input.nextInt()); 
-            //creates a new Artist object
-        }	
-        //close input;
-    }
-*/
+
     //Desc: writes the variables artistFirstName, artistLastName,
     //		and fashionabilityValue to a record line in the specified file
     //Post: updates the specified file
@@ -250,40 +205,17 @@ public int findIndex(String alastname, String afirstname)
             System.out.println ("\t" + e);
         }
     }
-        /* old way boolean deleted=RandomAccessFile.delete();
-        //clears file so that a new file can be written to this location
-            if(deleted)  
-            {
-                for(int i=0; arr.length<i; ++i )
-                {
-                        if(arr[i].) //if an Artist record resides in this index
-                        {
-                            //print each record to RandomAccessFile
-                            String fname=arr[i].getArtistFirstName();
-                            string lname=arr[i].getArtistLastName();
-                            int fash=arr[i].getFashionabilityValue();
-                            output.format("%-12s%-12s%-6d%n/", fname, lname, fash); 
-                            //writes 3 fields with formatting to fit allocated chars
-                        }
-                        else close RandomAccessFile
-                }
-            }
-        }*/
-
-//Desc: informs the user that the file they updated has 
-//      been saved with an output message
-//Pre: the file must exist
-//Post: the message informing the user has been printed
+ 
+    //Desc: saves an individual artist record into a file
+    //Post: the message informing the user has been printed
     public void save()
     {
-  // saves an individual artist record into a file, ordered by artistLastName.
-  //
         try
         {
             File artistFile = new File ("artist.dat");	// file of artist
             File  tempArtistFile = new File ("artist.tmp");	// temporary file for artist
 
-            Artist overwriteArtist = new Artist ();	// record read, then written
+            Artist tempArtist = new Artist ();	// record read, then written
             boolean	found = false;		// terminates while-loop
 
             RandomAccessFile newFile = new RandomAccessFile (tempArtistFile, "rw");
@@ -300,25 +232,20 @@ public int findIndex(String alastname, String afirstname)
 
                 while (oldFile.getFilePointer () != oldFile.length ()) //the pointer hasn't reached the end of the file
                 {
-                    overwriteArtist.read(oldFile); //read walks through each field in the record
+                    tempArtist.read(oldFile); //read walks through each field in the record
 
-                    if (artistFirstName.equals(overwriteArtist.getArtistFirstName()) &&
-                    artistLastName.equals(overwriteArtist.getArtistLastName()))
+                    if (artistFirstName.equals(tempArtist.getArtistFirstName()) &&
+                    artistLastName.equals(tempArtist.getArtistLastName()))
                         compareArtist=1;
                     else compareArtist=0;
 
-                    if (compareArtist==0) // the artist wasn't found in this record
+                    if (compareArtist ==1) 
                     {
-                        write (newFile); //writes to temp file 
-                        overwriteArtist.write (newFile); //writes to a 2nd temp file in case never found
-                    }
-                    else if (compareArtist ==1) 
-                    {
-                        write (newFile); //writes to temp file
+                        write (newFile); //replaces old file record with new file record
                     } 
                     else
                     {
-                      overwriteArtist.write (newFile); //writes to 2nd temp file
+                      tempArtist.write (newFile); //writes to 2nd temp file
                     }
               }  // while
 
@@ -332,6 +259,7 @@ public int findIndex(String alastname, String afirstname)
 
             artistFile.delete ();
             tempArtistFile.renameTo (artistFile);
+            System.out.println("record saved");
 
           }
           catch (Exception e)
@@ -341,8 +269,4 @@ public int findIndex(String alastname, String afirstname)
           }
 
       }
-        /* File artist=new File(A)
-        write(); //need to create the file here
-        System.out.println("Your record has been saved to the file");
-    }    
-}*?
+}
