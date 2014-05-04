@@ -22,7 +22,7 @@ private int fashionabilityValue;
 
     }
 
-    private Artist() {
+    Artist() {
     }
 
     //Desc: allows class to access the artistFirstName field in a record
@@ -93,7 +93,7 @@ private int fashionabilityValue;
     //Post: fashionabilityValue field is updated
     public void updateFashionabilityValue()
     {
-        System.out.println("Old Fashionability Value:" + artistLastName);
+        System.out.println("Old Fashionability Value:" + fashionabilityValue);
         System.out.println("Please enter new Fashionability Value");
         Scanner input=new Scanner(System.in);
         fashionabilityValue= input.nextInt();
@@ -152,7 +152,7 @@ private int fashionabilityValue;
 
             StringBuffer input = new StringBuffer ();	// for storing field within record
 
-            while (inputString.charAt (i) != ' ')
+            while (inputString.charAt (i) != '|')
             {
               input.append (inputString.charAt (i));
               i++;
@@ -162,7 +162,7 @@ private int fashionabilityValue;
             i++;
 
             input = new StringBuffer ();
-            while (inputString.charAt (i) != ' ')
+            while (inputString.charAt (i) != '|')
             {
               input.append (inputString.charAt (i));
               i++;
@@ -171,7 +171,7 @@ private int fashionabilityValue;
             i++;
 
             input = new StringBuffer ();
-            while (inputString.charAt (i) != ' ')
+            while (inputString.charAt (i) != '|')
             {
               input.append (inputString.charAt (i));
               i++;
@@ -195,9 +195,9 @@ private int fashionabilityValue;
     {
         try
         {
-            fileName.writeChars (artistFirstName + " " + artistLastName + " ");
+            fileName.writeChars (artistFirstName + "|" + artistLastName + "|");
             fileName.writeInt(fashionabilityValue);
-            fileName.writeChars(" " + "\n");
+            fileName.writeChars("\n");
         }
         catch (Exception e)
         {
