@@ -3,7 +3,8 @@ import java.io.*;
 import java.util.Scanner;
 
 
- //@author jessicaspalding
+ //tested: gets, sets, constructors, find, read, updates (with new UI method)
+//Fixes:  write works for strings, not ints, save doesn't save new record yet
 
 class Artist {
 
@@ -19,7 +20,6 @@ private int fashionabilityValue;
         artistFirstName=f;
         artistLastName=l;
         fashionabilityValue=v;
-
     }
 
     Artist() {
@@ -71,10 +71,23 @@ private int fashionabilityValue;
     //Post: artistsFirstName field is updated 
     public void updateArtistsFirstName()
     {
+        String str="";
         System.out.println("Old Artist First Name:" + artistFirstName);
-        System.out.println("Please enter new Artist First Name");
-        Scanner input=new Scanner(System.in);
-        artistFirstName=input.toString();
+        System.out.println("Please enter new Artist First Name and press <ENTER>: \n");
+        //this needs to go in UserInterface and be called with UserInterface.getString instead that returns str.
+        try 
+        {
+        DataInputStream MyInput = new DataInputStream(System.in);
+        str = MyInput.readLine();
+        }
+       catch (Exception e)
+        {
+
+        System.out.println("Error: " + e.toString());
+
+        }
+        artistFirstName=str;
+
     }
 
     //Desc: Finds the record the user wants to update and updates the 
@@ -84,7 +97,7 @@ private int fashionabilityValue;
     {
         System.out.println("Old Artist Last Name:" + artistLastName);
         System.out.println("Please enter new Artist Last Name");
-        Scanner input=new Scanner(System.in);
+        Scanner input=new Scanner(System.in);//need a UserInterface.getString here instead.
         artistLastName=input.toString();
     }	
 
@@ -95,7 +108,7 @@ private int fashionabilityValue;
     {
         System.out.println("Old Fashionability Value:" + fashionabilityValue);
         System.out.println("Please enter new Fashionability Value");
-        Scanner input=new Scanner(System.in);
+        Scanner input=new Scanner(System.in);//need a UserInterface.getInt here instead.
         fashionabilityValue= input.nextInt();
     }	
 
@@ -103,25 +116,32 @@ private int fashionabilityValue;
     //     in the file
     //Post: 
     //Return: returns true if record is found or false if record is not found
-    public boolean find(String alastname, String afirstname) //I don't think this works
+    public boolean find(String afirstname, String alastname) //I don't think this works
     {
   // find locates a given investment record if it exists.
   // Returns true if the investment is located, otherwise false.
         try
         {
-            File artistFile = new File ("Artist.dat");
+            File artistFile = new File ("artist.dat");
             boolean found = false;		
 
             if (artistFile.exists ())
+            
             {
                RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+               
+               System.out.println(inFile.getFilePointer());
+               System.out.println(inFile.length());
 
-                while (!found && (inFile.getFilePointer () != inFile.length ()))
+                while (!found && (inFile.getFilePointer()!=inFile.length()))
                 {
+                   
                     read (inFile);
+                     
 
-                    if (artistLastName.equals(alastname) && artistFirstName.equals(afirstname))
-                        found = true;
+                    if (artistLastName.equalsIgnoreCase(alastname) && 
+                            artistFirstName.equalsIgnoreCase(afirstname))
+                        found = true;       
                 }
                   inFile.close();
             }
@@ -134,7 +154,6 @@ private int fashionabilityValue;
 
             return false; //returns boolean right now, not artist
         }
-
   }
     
     //Desc: reads an artist record form fileName
@@ -158,7 +177,7 @@ private int fashionabilityValue;
               i++;
             }
 
-            artistFirstName = input.toString ();
+            artistFirstName = input.toString();
             i++;
 
             input = new StringBuffer ();
@@ -195,9 +214,9 @@ private int fashionabilityValue;
     {
         try
         {
-            fileName.writeChars (artistFirstName + "|" + artistLastName + "|");
-            fileName.writeInt(fashionabilityValue);
-            fileName.writeChars("\n");
+            fileName.writeBytes(artistFirstName + "|" + artistLastName + "|");
+            //fileName.writeBytes(fashionabilityValue);
+            fileName.writeBytes("|" + "\n");
         }
         catch (Exception e)
         {
@@ -234,8 +253,8 @@ private int fashionabilityValue;
                 {
                     tempArtist.read(oldFile); //read walks through each field in the record
 
-                    if (artistFirstName.equals(tempArtist.getArtistFirstName()) &&
-                    artistLastName.equals(tempArtist.getArtistLastName()))
+                    if (artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()) &&
+                    artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName()))
                         compareArtist=1;
                     else compareArtist=0;
 
@@ -249,7 +268,7 @@ private int fashionabilityValue;
                     }
               }  // while
 
-              //if (compareArist==0) write (newFile); // if never found in file, write to temp file
+              if (compareArist=0) write (newFile); // if never found in file, write to temp file
 
               oldFile.close ();
 
