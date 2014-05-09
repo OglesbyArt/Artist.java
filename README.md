@@ -1,5 +1,6 @@
 package artpricingsystem;
 import java.io.*;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -71,7 +72,6 @@ private int fashionabilityValue;
     //Post: artistsFirstName field is updated 
     public void updateArtistsFirstName()
     {
-        String str="";
         System.out.println("Old Artist First Name:" + artistFirstName);
         System.out.println("Please enter new Artist First Name and press <ENTER>: \n");
         artistFirstName=UserInterface.getString();
@@ -83,7 +83,7 @@ private int fashionabilityValue;
     public void updateArtistLastName()
     {
         System.out.println("Old Artist Last Name:" + artistLastName);
-        System.out.println("Please enter new Artist Last Name");
+        System.out.println("Please enter new Artist Last Name and press <ENTER>: \n");
         artistLastName=UserInterface.getString();
     }	
 
@@ -93,7 +93,7 @@ private int fashionabilityValue;
     public void updateFashionabilityValue()
     {
         System.out.println("Old Fashionability Value:" + fashionabilityValue);
-        System.out.println("Please enter new Fashionability Value");
+        System.out.println("Please enter new Fashionability Value and press <ENTER>: \n");
         fashionabilityValue=UserInterface.getInt();
     }	
 
@@ -112,6 +112,8 @@ private int fashionabilityValue;
             if (artistFile.exists())
             {
                 RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+                
+                
                 while (!found && (inFile.getFilePointer()!=inFile.length()))
                 {
                     read (inFile);
@@ -125,9 +127,9 @@ private int fashionabilityValue;
         }
         catch (Exception e)
         {
-            System.out.println ("***** Error: Investment.find () *****");
+            System.out.println ("***** Error: Artist.find () *****");
             System.out.println ("\t" + e);
-            return false; //returns boolean right now, not artist
+            return false;
         }
   }
     
@@ -150,6 +152,7 @@ private int fashionabilityValue;
             }
             artistFirstName = input.toString();
             i++;
+            
             input = new StringBuffer ();
             while (inputString.charAt (i) != '|')
             {
@@ -158,6 +161,7 @@ private int fashionabilityValue;
             }
             artistLastName = input.toString ();
             i++;
+            
             input = new StringBuffer ();
             while (inputString.charAt (i) != '|')
             {
@@ -216,12 +220,9 @@ private int fashionabilityValue;
             {
                 RandomAccessFile oldFile = new RandomAccessFile (artistFile, "r");
                 boolean compareArtist;
-                while (oldFile.getFilePointer () != oldFile.length ()) //the pointer hasn't reached the end of the file
+                while (oldFile.getFilePointer () != oldFile.length ()) 
                 {
-                    tempArtist.read(oldFile); //read walks through each field in the record
-
-                    System.out.println(artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()));
-                    System.out.println(artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName()));
+                    tempArtist.read(oldFile);
                     if (artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()) &&
                     artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName()))
                         compareArtist=true;
@@ -236,11 +237,11 @@ private int fashionabilityValue;
                       tempArtist.write(newFile); 
                     }
                 }  
-                if (!found) write (newFile); // if never found in file, write to temp file
+                if (!found) write (newFile); 
 
               oldFile.close ();
 
-            }  // else
+            }
 
             newFile.close ();
 
@@ -255,14 +256,80 @@ private int fashionabilityValue;
               System.out.println ("\t" + e);
           }
       }
+    
+    public void readInRecord()
+    {
+        try
+        {
+            char c;				// character entered by user
+            String input;                      	// buffer for line of characters
+            boolean valid = false;      		// used to validate length of ID
+            System.out.println("Enter Artist First name: ");
+            artistFirstName = UserInterface.getString();
+            System.out.println("Enter Artist Last name: ");
+            artistLastName= UserInterface.getString();
+            System.out.println("Enter Fashionability Value: ");
+            fashionabilityValue = UserInterface.getInt(); //catch errors here if its not an int.
+            while (fashionabilityValue<0 ||fashionabilityValue>10000)
+            {
+                System.out.println("Value out of range.  Please select integer value between 0 and 10,000: ");
+                fashionabilityValue=UserInterface.getInt();
+            }
+        }
+          catch (Exception e)
+          {
+            System.out.println ("***** Error: Investment.readInvestmentData () *****");
+            System.out.println ("\t" + e);
+          }
+    }
+    //Deletes a single record, but right now deletes all but the specified record
+    public void performDeletion () //test this!!!
+
+  {
+    try
+    {
+	File  artistFile = new File ("artist.dat");
+	File  tempArtistFile = new File ("artist.tmp");
+
+	Artist tempArtist = new Artist ();	// record to be checked
+
+	if (!artistFile.exists ())
+	{
+	  return;
+	}
+
+	RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+	RandomAccessFile outFile = new RandomAccessFile (tempArtistFile, "rw");
+
+	while (inFile.getFilePointer () != inFile.length ())
+	{
+	  tempArtist.read (inFile);
+          if (!(artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()) &&
+              artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName())))	 
+          {
+	      tempArtist.write (outFile);
+	  }
+	}
+
+	inFile.close ();
+	outFile.close ();
+
+	artistFile.delete ();
+	tempArtistFile.renameTo (artistFile);
+
+    }
+    catch (Exception e)
+    {
+	System.out.println ("***** Error: BoughtPainting.performDeletion () *****");
+	System.out.println ("\t" + e);
+    }
+
+  }  // performDeletion
   public void print ()
-  //
-  // displays the contents of an investment object.
-  //
   {
       System.out.print ("Artist First Name: " + artistFirstName);
       System.out.print ("\t Artist Last Name: " + artistLastName);
       System.out.println ("\t Fashionability Value: " + fashionabilityValue);
-  }  // print
+  } 
 
 }
