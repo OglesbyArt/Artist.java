@@ -331,5 +331,30 @@ private int fashionabilityValue;
       System.out.print ("\t Artist Last Name: " + artistLastName);
       System.out.println ("\t Fashionability Value: " + fashionabilityValue);
   } 
+   public void add ()
+
+  {
+    try
+    {
+	int c;	// character entered by user
+
+	//obtainNewData ();
+       /* updateFashionabilityValue();
+        updateArtistLastName();
+        updateArtistsFirstName();*/
+        readInRecord();
+	save ();
+	System.out.println ("\nThe following record was inserted\n");
+	print ();
+	//UserInterface.pressEnter();
+
+    }
+    catch (Exception e)
+    {
+	System.out.println ("***** Error: Asset.add () *****");
+	System.out.println ("\t" + e);
+    }
+
+  }  // add
 
 }
