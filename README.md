@@ -361,8 +361,8 @@ private int fashionabilityValue;
             save ();
             System.out.println ("\nThe following record was inserted\n");
             print ();
-            //UserInterface.pressEnter();
-
+            System.out.println("Press <ENTER> to return to Main Menu");
+            UserInterface.pressEnter();
         }
         catch (Exception e)
         {
