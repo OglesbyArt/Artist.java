@@ -363,6 +363,7 @@ private int fashionabilityValue;
             print ();
             System.out.println("Press <ENTER> to return to Main Menu");
             UserInterface.pressEnter();
+
         }
         catch (Exception e)
         {
@@ -408,6 +409,8 @@ private int fashionabilityValue;
 	}
 	performDeletion ();
 	System.out.println ("\nThe record has been deleted.");
+        System.out.println("Press <ENTER> to return to Main Menu");
+        UserInterface.pressEnter();
         return;
 	//UserInterface.pressEnter();
     }
