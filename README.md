@@ -370,4 +370,53 @@ private int fashionabilityValue;
             System.out.println ("\t" + e);
         }
     }
+   
+     //Desc: Deletes an Artist
+    public void delete ()
+    {
+        try
+        {
+            String  input1;        // buffer for line of characters
+            String  input2;
+            boolean done = false;// tells when user is done entering information
+            boolean  found = false;// tells when an investment has been found
+            char choice;   // for storing user's response
+            while (!found && !done)
+            {
+                  System.out.println ("Please enter the artist's first name to be deleted: ");
+                  input1 =  UserInterface.getString();
+                  System.out.println ("Please enter the artist's last name to be deleted: ");
+                  input2 =  UserInterface.getString();
+                  found = find (input1, input2);
+                  if (found)
+                      done=true;
+                  if (!found)
+                  {
+                    System.out.println ("Either "+input1.toString () + " or " + input2.toString() +
+                                        " was not found.");
+                    System.out.println ("Would you like to enter another artist first name or last name (Y/N)?");
+                    choice = UserInterface.getChar();
+                    if (choice == 'N'|| choice == 'n')
+                    {
+                      done = true;
+                    }
+                  }
+            }
+	if (!found)
+	{
+          return;
+	}
+	performDeletion ();
+	System.out.println ("\nThe record has been deleted.");
+        return;
+	//UserInterface.pressEnter();
+    }
+    catch (Exception e)
+    {
+	System.out.println ("***** Error: Artist.delete () *****");
+	System.out.println ("\t" + e);
+    }
+
+  }  // delete
+
 }
