@@ -23,6 +23,9 @@ private int fashionabilityValue;
     //Post: instentiates a blank Artist object
     Artist() 
     {
+        artistFirstName="";
+        artistLastName="";
+        fashionabilityValue=0;
     }
 
     //Desc: allows class to access the artistFirstName field in a record
@@ -259,8 +262,6 @@ private int fashionabilityValue;
 
             artistFile.delete ();
             tempArtistFile.renameTo (artistFile);
-            System.out.println("record saved to file");
-
           }
           catch (Exception e)
           {
@@ -286,6 +287,7 @@ private int fashionabilityValue;
                 System.out.println("Value out of range.  Please select integer value between 0 and 10,000: ");
                 fashionabilityValue=UserInterface.getInt();
             }
+            return;
         }
         catch (NumberFormatException e)
         {
@@ -348,29 +350,24 @@ private int fashionabilityValue;
     } 
 
    public void add ()
-
-  {
-    try
     {
-	int c;	// character entered by user
+        try
+        {
+            //obtainNewData ();
+           /* updateFashionabilityValue();
+            updateArtistLastName();
+            updateArtistsFirstName();*/
+            readInRecord();
+            save ();
+            System.out.println ("\nThe following record was inserted\n");
+            print ();
+            //UserInterface.pressEnter();
 
-	//obtainNewData ();
-       /* updateFashionabilityValue();
-        updateArtistLastName();
-        updateArtistsFirstName();*/
-        readInRecord();
-	save ();
-	System.out.println ("\nThe following record was inserted\n");
-	print ();
-	//UserInterface.pressEnter();
-
+        }
+        catch (Exception e)
+        {
+            System.out.println ("***** Error: Artist.add () *****");
+            System.out.println ("\t" + e);
+        }
     }
-    catch (Exception e)
-    {
-	System.out.println ("***** Error: Artist.add () *****");
-	System.out.println ("\t" + e);
-    }
-
-  }  // add
-
 }
