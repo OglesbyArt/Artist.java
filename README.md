@@ -3,10 +3,6 @@ import java.io.*;
 import java.util.Date;
 import java.util.Scanner;
 
-
- //tested: gets, sets, constructors, find, read, updates (with new UI method), write
-//Fixes: save doesn't save new record yet
-
 class Artist {
 
 private String artistFirstName;
@@ -15,7 +11,7 @@ private int fashionabilityValue;
 
     //Desc: constructor for Artist
     //Post: allows class to set the value of the artistFirstName, artistLastName,
-    //		and fashionabilityValue field in a record
+    //		and fashionabilityValue field into this object
     Artist(String f, String l, int v)
     {
         artistFirstName=f;
@@ -23,7 +19,10 @@ private int fashionabilityValue;
         fashionabilityValue=v;
     }
 
-    Artist() {
+    //Desc: no arg constructor for Artist
+    //Post: instentiates a blank Artist object
+    Artist() 
+    {
     }
 
     //Desc: allows class to access the artistFirstName field in a record
@@ -73,38 +72,48 @@ private int fashionabilityValue;
     public void updateArtistsFirstName()
     {
         System.out.println("Old Artist First Name:" + artistFirstName);
-        System.out.println("Please enter new Artist First Name and press <ENTER>: \n");
+        System.out.println("Please enter new Artist First Name and press <ENTER>: ");
         artistFirstName=UserInterface.getString();
     }
 
-    //Desc: Finds the record the user wants to update and updates the 
-    //artistLastName field in the found object
+    //Desc: updates an artist's last name in a record from user's input
     //Post: artistLastName field is updated
     public void updateArtistLastName()
     {
         System.out.println("Old Artist Last Name:" + artistLastName);
-        System.out.println("Please enter new Artist Last Name and press <ENTER>: \n");
+        System.out.println("Please enter new Artist Last Name and press <ENTER>: ");
         artistLastName=UserInterface.getString();
     }	
 
-    //Desc: Finds the record the user wants to update and updates the 
-    //fashionabilityValue field in the found object
+    //Desc: updates an artist's fashionability value in a record from user's input
     //Post: fashionabilityValue field is updated
     public void updateFashionabilityValue()
     {
-        System.out.println("Old Fashionability Value:" + fashionabilityValue);
-        System.out.println("Please enter new Fashionability Value and press <ENTER>: \n");
-        fashionabilityValue=UserInterface.getInt();
+        try 
+        {
+            System.out.println("Old Fashionability Value:" + fashionabilityValue);
+            System.out.println("Please enter new Fashionability Value and press <ENTER>: ");
+            if (fashionabilityValue>=0 && fashionabilityValue>10000)
+            {
+                System.out.println("Value out of range.  Please select integer value between 0 and 10,000: ");
+                fashionabilityValue=UserInterface.getInt();
+            }
+        
+            fashionabilityValue=UserInterface.getInt();
+        }
+        catch (NumberFormatException e)
+        {
+           System.out.println("Value entered is not an integer Value. Please select"
+                   + " an integer value between 0 and 10,000: "); 
+           fashionabilityValue=Integer.parseInt(UserInterface.getString());
+           return;
+        }
     }	
 
-    //Desc:uses the last name and the first name of an artist to find a record
-    //     in the file
-    //Post: 
+    //Desc:uses the last and first name of an artist to find a record in the file
     //Return: returns true if record is found or false if record is not found
-    public boolean find(String afirstname, String alastname) //I don't think this works
+    public boolean find(String afirstname, String alastname)
     {
-  // find locates a given investment record if it exists.
-  // Returns true if the investment is located, otherwise false.
         try
         {
             File artistFile = new File ("artist.dat");
@@ -131,12 +140,11 @@ private int fashionabilityValue;
             System.out.println ("\t" + e);
             return false;
         }
-  }
+    }
     
-    //Desc: reads an artist record form fileName
-    //Pre: file must exist 
-    //Post: artistLastName, artistFirstName and fashionabilityValue in this 
-    //      object are changed
+    //Desc: reads a single artist record into an object from the fileName
+    //Pre: RandomAccessFile must exist 
+    //Post: artistLastName, artistFirstName and fashionabilityValue are read into this object
     public void read(RandomAccessFile fileName)
     {
         try
@@ -176,12 +184,12 @@ private int fashionabilityValue;
         {
             System.out.println ("***** Error: Arist.read () *****");
             System.out.println ("\t" + e);
+            return;
         }
-
     }
 
     //Desc: writes the variables artistFirstName, artistLastName,
-    //		and fashionabilityValue to a record line in the specified file
+    //	and fashionabilityValue to a record line in the specified file
     //Post: updates the specified file
     public void write(RandomAccessFile fileName)
     {
@@ -200,8 +208,12 @@ private int fashionabilityValue;
         }
     }
  
-    //Desc: saves an individual artist record into a file
-    //Post: the message informing the user has been printed
+    //Desc: saves an individual artist record into a file.  Will save over an
+    //      existing record if the last name and first name match or will add
+    //      a new record if no existing record matches this object.
+    //Pre:  all fields must be valid
+    //Post: the message informing the user has been printed and the artist.dat
+    //      file will be modified.
     public void save()
     {
         try
@@ -255,82 +267,86 @@ private int fashionabilityValue;
               System.out.println ("***** Error: Artist.putRecord () *****");
               System.out.println ("\t" + e);
           }
-      }
+    }
     
+    //Desc: reads in all fields into an Artist object from user input
+    //Post: artistFirstName, artistLastName, and fashionabilityValue are modified
     public void readInRecord()
     {
         try
-        {
-            char c;				// character entered by user
-            String input;                      	// buffer for line of characters
-            boolean valid = false;      		// used to validate length of ID
+        {     		
             System.out.println("Enter Artist First name: ");
             artistFirstName = UserInterface.getString();
             System.out.println("Enter Artist Last name: ");
             artistLastName= UserInterface.getString();
             System.out.println("Enter Fashionability Value: ");
-            fashionabilityValue = UserInterface.getInt(); //catch errors here if its not an int.
-            while (fashionabilityValue<0 ||fashionabilityValue>10000)
+            fashionabilityValue=Integer.parseInt(UserInterface.getString());
+            while (fashionabilityValue<0 && fashionabilityValue>10000)
             {
                 System.out.println("Value out of range.  Please select integer value between 0 and 10,000: ");
                 fashionabilityValue=UserInterface.getInt();
             }
         }
-          catch (Exception e)
-          {
+        catch (NumberFormatException e)
+        {
+           System.out.println("Value entered is not an integer Value. Please select"
+                   + " an integer value between 0 and 10,000: ");
+           fashionabilityValue=Integer.parseInt(UserInterface.getString());
+           return;
+        }
+        /*catch(Exception e)
+        {
             System.out.println ("***** Error: Investment.readInvestmentData () *****");
             System.out.println ("\t" + e);
-          }
+        }*/
     }
-    //Deletes a single record, but right now deletes all but the specified record
-    public void performDeletion () //test this!!!
-
-  {
-    try
+    
+    //Desc: Deletes a single record in the artist.dat File if the artist last 
+    //      name and first name matches this object.
+    //Post: Modifies the artist.dat File
+    public void performDeletion () 
     {
-	File  artistFile = new File ("artist.dat");
-	File  tempArtistFile = new File ("artist.tmp");
+        try
+        {
+            File  artistFile = new File ("artist.dat");
+            File  tempArtistFile = new File ("artist.tmp");
+            Artist tempArtist = new Artist ();	
+            if (!artistFile.exists ())
+            {
+                return;
+            }
+            RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+            RandomAccessFile outFile = new RandomAccessFile (tempArtistFile, "rw");
+            while (inFile.getFilePointer () != inFile.length ())
+            {
+                tempArtist.read (inFile);
+                if (!(artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()) &&
+                artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName())))	 
+                {
+                    tempArtist.write (outFile);
+                }
+            }
+            inFile.close ();
+            outFile.close ();
+            artistFile.delete ();
+            tempArtistFile.renameTo (artistFile);
+        }
+        catch (Exception e)
+        {
+            System.out.println ("***** Error: BoughtPainting.performDeletion () *****");
+            System.out.println ("\t" + e);
+        }
+    }  
 
-	Artist tempArtist = new Artist ();	// record to be checked
-
-	if (!artistFile.exists ())
-	{
-	  return;
-	}
-
-	RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
-	RandomAccessFile outFile = new RandomAccessFile (tempArtistFile, "rw");
-
-	while (inFile.getFilePointer () != inFile.length ())
-	{
-	  tempArtist.read (inFile);
-          if (!(artistFirstName.equalsIgnoreCase(tempArtist.getArtistFirstName()) &&
-              artistLastName.equalsIgnoreCase(tempArtist.getArtistLastName())))	 
-          {
-	      tempArtist.write (outFile);
-	  }
-	}
-
-	inFile.close ();
-	outFile.close ();
-
-	artistFile.delete ();
-	tempArtistFile.renameTo (artistFile);
-
-    }
-    catch (Exception e)
+    // Desc: Prints out a single record of an Artist
+    // Post: one line is printed to the screen.
+     public void print ()
     {
-	System.out.println ("***** Error: BoughtPainting.performDeletion () *****");
-	System.out.println ("\t" + e);
-    }
-
-  }  // performDeletion
-  public void print ()
-  {
       System.out.print ("Artist First Name: " + artistFirstName);
       System.out.print ("\t Artist Last Name: " + artistLastName);
       System.out.println ("\t Fashionability Value: " + fashionabilityValue);
-  } 
+    } 
+
    public void add ()
 
   {
@@ -351,7 +367,7 @@ private int fashionabilityValue;
     }
     catch (Exception e)
     {
-	System.out.println ("***** Error: Asset.add () *****");
+	System.out.println ("***** Error: Artist.add () *****");
 	System.out.println ("\t" + e);
     }
 
