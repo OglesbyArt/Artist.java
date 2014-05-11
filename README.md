@@ -77,6 +77,11 @@ private int fashionabilityValue;
         System.out.println("Old Artist First Name:" + artistFirstName);
         System.out.println("Please enter new Artist First Name and press <ENTER>: ");
         artistFirstName=UserInterface.getString();
+        while(artistFirstName.length()>30) 
+        {
+            System.out.println("Artist First Name exceeds 30 characters. Please enter shortened name:");
+            artistFirstName=UserInterface.getString();
+        }      
     }
 
     //Desc: updates an artist's last name in a record from user's input
@@ -86,6 +91,11 @@ private int fashionabilityValue;
         System.out.println("Old Artist Last Name:" + artistLastName);
         System.out.println("Please enter new Artist Last Name and press <ENTER>: ");
         artistLastName=UserInterface.getString();
+        while(artistLastName.length()>30) 
+        {
+            System.out.println("Artist Last Name exceeds 30 characters. Please enter shortened name:");
+            artistLastName=UserInterface.getString();
+        }      
     }	
 
     //Desc: updates an artist's fashionability value in a record from user's input
@@ -278,8 +288,18 @@ private int fashionabilityValue;
         {     		
             System.out.println("Enter Artist First name: ");
             artistFirstName = UserInterface.getString();
+            while(artistFirstName.length()>30) 
+            {
+                System.out.println("Artist First Name exceeds 30 characters. Please enter shortened name:");
+                artistFirstName=UserInterface.getString();
+            }       
             System.out.println("Enter Artist Last name: ");
             artistLastName= UserInterface.getString();
+            while(artistLastName.length()>30) 
+            {
+                System.out.println("Artist Last Name exceeds 30 characters. Please enter shortened name:");
+                artistLastName=UserInterface.getString();
+            } 
             System.out.println("Enter Fashionability Value: ");
             fashionabilityValue=Integer.parseInt(UserInterface.getString());
             while (fashionabilityValue<0 && fashionabilityValue>10000)
@@ -361,8 +381,7 @@ private int fashionabilityValue;
             save ();
             System.out.println ("\nThe following record was inserted\n");
             print ();
-            System.out.println("Press <ENTER> to return to Main Menu");
-            UserInterface.pressEnter();
+            //UserInterface.pressEnter();
 
         }
         catch (Exception e)
@@ -409,8 +428,6 @@ private int fashionabilityValue;
 	}
 	performDeletion ();
 	System.out.println ("\nThe record has been deleted.");
-        System.out.println("Press <ENTER> to return to Main Menu");
-        UserInterface.pressEnter();
         return;
 	//UserInterface.pressEnter();
     }
@@ -420,25 +437,14 @@ private int fashionabilityValue;
 	System.out.println ("\t" + e);
     }
 
-  }  // delete
-
-     //Desc:uses the last name and the first name of an artist to find a record
+  } 
+    //Desc:uses the last name and the first name of an artist to find a record
     //     in the file
     //Post:
     //Return: returns true if record is found or false if record is not found
     public int findFashionabilityValue(String afirstname, String alastname)
     {
-  // find locates a given investment record if it exists.
-  // Returns true if the investment is located, otherwise false.
-        try
-        {
-            File artistFile = new File ("artist.dat");
-            boolean found = false;
-            int fashionability=0;
-            if (artistFile.exists())
-            {
-                RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
-
+    // find locates a given investment record if it exists. // Returns true if the investment is located, otherwise false. try { File artistFile = new File ("artist.dat"); boolean found = false; int fashionability=0; if (artistFile.exists()) { RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
 
                 while (!found && (inFile.getFilePointer()!=inFile.length()))
                 {
@@ -458,5 +464,5 @@ private int fashionabilityValue;
             System.out.println ("\t" + e);
             return 0;
         }
-  }
+    }
 }
