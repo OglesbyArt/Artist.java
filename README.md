@@ -438,21 +438,33 @@ private int fashionabilityValue;
     }
 
   } 
-    //Desc:uses the last name and the first name of an artist to find a record
+     //Desc:uses the last name and the first name of an artist to find a record
     //     in the file
     //Post:
     //Return: returns true if record is found or false if record is not found
     public int findFashionabilityValue(String afirstname, String alastname)
     {
-    // find locates a given investment record if it exists. // Returns true if the investment is located, otherwise false. try { File artistFile = new File ("artist.dat"); boolean found = false; int fashionability=0; if (artistFile.exists()) { RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+  // find locates a given investment record if it exists.
+  // Returns true if the investment is located, otherwise false.
+        try
+        {
+            File artistFile = new File ("artist.dat");
+            boolean found = false;
+            int fashionability=0;
+            if (artistFile.exists())
+            {
+                RandomAccessFile inFile = new RandomAccessFile (artistFile, "r");
+
 
                 while (!found && (inFile.getFilePointer()!=inFile.length()))
                 {
                     read (inFile);
-                    if (artistLastName.equalsIgnoreCase(alastname) &&
-                    artistFirstName.equalsIgnoreCase(afirstname))
+                    if (alastname.equalsIgnoreCase(artistLastName) &&
+                    afirstname.equalsIgnoreCase(artistFirstName))
+                    {
                         found = true;
                     fashionability=fashionabilityValue;
+                    }
                 }
                 inFile.close();
             }
@@ -464,5 +476,5 @@ private int fashionabilityValue;
             System.out.println ("\t" + e);
             return 0;
         }
-    }
+  }
 }
