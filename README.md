@@ -302,7 +302,7 @@ private int fashionabilityValue;
             } 
             System.out.println("Enter Fashionability Value: ");
             fashionabilityValue=Integer.parseInt(UserInterface.getString());
-            while (fashionabilityValue<0 && fashionabilityValue>10000)
+            while (fashionabilityValue<0 || fashionabilityValue>10000)
             {
                 System.out.println("Value out of range.  Please select integer value between 0 and 10,000: ");
                 fashionabilityValue=UserInterface.getInt();
