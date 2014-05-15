@@ -428,8 +428,9 @@ private int fashionabilityValue;
 	}
 	performDeletion ();
 	System.out.println ("\nThe record has been deleted.");
+	System.out.println("Press <ENTER> to return to menu");
+        UserInterface.pressEnter();
         return;
-	//UserInterface.pressEnter();
     }
     catch (Exception e)
     {
